@@ -1,24 +1,28 @@
-import React, {useState, useEffect}  from 'react';
+import React, { useState } from 'react';
 import { Autocomplete } from '@mantine/core';
-import axios from 'axios';
+import { Button } from '@mantine/core';
 
-function TextInput() {
-    
-    const [pokemons, setPokemons] = useState([]);
+function TextInput({list, search}) {
+  const [searchValue, setSearchValue] = useState('');
 
-    useEffect(() => {
-     axios.get("https://pokeapi.co/api/v2/pokemon/")
-       .then(res => {
-           setPokemons(res.data.results.map(pokemon=>pokemon.name));
-       })
-    }, [])
+  const onButtonPress = () => {
+    search(searchValue);
+  };
+
   return (
     <div className="TextWrapper">
-            <Autocomplete
-      label="Gotta search 'em all!"
-      placeholder="Insert pokémon name"
-      data={ pokemons }
-    />
+      <h1>Gotta search 'em all!</h1>
+      <div className='ButtonWrapper'>
+        <Autocomplete
+          //label="Gotta search 'em all!"
+          placeholder="Insert pokémon name"
+          data={ list.map((pokemon) => pokemon.name) }
+          className='searchbar'
+          onChange={setSearchValue}
+          />
+        <Button variant="filled" color="rgba(31, 176, 255, 1)" onClick={onButtonPress}>Search</Button>
+      </div>
+
     </div>
   );
 }
