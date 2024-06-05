@@ -10,9 +10,9 @@ function TextInput({list, search}) {
   };
 
   return (
-    <div className="TextWrapper">
+    <div className="text-wrapper">
       <h1>Gotta search 'em all!</h1>
-      <div className='ButtonWrapper'>
+      <div className='button-wrapper'>
         <Autocomplete
           //label="Gotta search 'em all!"
           placeholder="Insert pokémon name"

@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import { Grid, Container, Image } from '@mantine/core';
 
-function ResultPokemon ({pokemonName}) {
+function ResultPokemon ({pokemonName, setSelected}) {
     const [pokemon, setPokemon] = useState(null);
     const [evolutions, setEvolutions] = useState([]);
+    
+    
 
     function simplifyEvolutionData(chain) {
         let evolutions = [chain.species];
@@ -27,6 +30,7 @@ function ResultPokemon ({pokemonName}) {
                             .then((evolutionRes) => {
                                 const evolutions = simplifyEvolutionData(evolutionRes.data.chain);
                                 setEvolutions(evolutions);
+                                console.log(pokemon)
                             });
 
                     });
@@ -39,21 +43,51 @@ function ResultPokemon ({pokemonName}) {
     }
 
     return (
-        <dl>
-            <dt>Name:</dt>
-            <dd>{pokemon.name}</dd>
+        <Container>
+             <Grid>
+                <Grid.Col span={3}>
+                    <Image w={200} h="auto" src={pokemon.sprites.front_default} alt='Pokemon Image'/>
+                    
+                </Grid.Col>
+                <Grid.Col span={3}>                   
+                    <h4>Name:</h4>
+                    <p>{pokemon.name}</p>
+                </Grid.Col>
 
-            <dt>Height:</dt>
-            <dd>{pokemon.height}</dd>
+                <Grid.Col span={3}>
+                    <h4>ID:</h4>
+                    <p>{pokemon.id}</p> 
+                </Grid.Col>
 
-            <dt>Weight:</dt>
-            <dd>{pokemon.weight}</dd>
+                <Grid.Col span={3}>
+                    <h4>Type:</h4>
+                    <p>{pokemon.types.map((type) => type.type.name).join(' - ')}</p> 
+                </Grid.Col>
 
-            <dt>Evolution:</dt>
-            <dd>
-                <ul>{evolutions.map((evolution) => <li key={evolution.name} className={pokemon.name === evolution.name? "selectedPokemon" : null}>{evolution.name}</li>)}</ul>
-            </dd>
-        </dl>
+
+                    <Grid.Col span={4}>              
+                        <h4>Height:</h4>
+                        <p>{pokemon.height}"</p>
+                    </Grid.Col>
+
+                    <Grid.Col span={4}>
+                        <h4>Weight:</h4>
+                        <p>{pokemon.weight} lb</p>
+                    </Grid.Col>
+                    <Grid.Col span={4}>
+                        <h4>Evolution:</h4>
+                        <p>
+                            <ul>
+                                {evolutions.map((evolution) => <li 
+                                key={evolution.name} 
+                                className={pokemon.name === evolution.name? "selected-pokemon" : "cursor"} 
+                                onClick={()=>pokemon.name !== evolution.name? setSelected(evolution.name) : null}>{evolution.name}</li>)}
+                            </ul>
+                        </p>
+                    </Grid.Col>
+            </Grid>
+        </Container>
+
     );
 }
  

@@ -1,4 +1,5 @@
 import React , {useState, useEffect} from 'react';
+import { LoadingOverlay, Container, Box } from '@mantine/core';
 import './App.css';
 import TextInput from './Components/TextInput'; 
 import HeaderNavbar from './Components/HeaderNavbar';
@@ -9,6 +10,7 @@ function App() {
   
   const [pokemons, setPokemons] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   async function getPokemons(url) {
     const res = await axios.get(url);
@@ -17,9 +19,12 @@ function App() {
     if(res.data.next) {
       const nextPagePokemons = await getPokemons(res.data.next);
       pokemons = pokemons.concat(nextPagePokemons);
+    }else{
+      setLoading(false);
     }
 
     return pokemons;
+
   }
 
   useEffect(() => {
@@ -30,13 +35,18 @@ function App() {
    }, []);
    
   return (
-    <div className="App">
-      <div className='Content'>
-        <HeaderNavbar/>
-        <TextInput list={pokemons} search={setSelected} />
-        {selected !== null && <ResultPokemon pokemonName={selected} />}
-      </div>
-    </div>
+    <Container className="App" fluid>
+      
+      <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+        <div className='content'>
+          
+          <HeaderNavbar/>
+          <Box className='transition' pt={selected?0:200}>
+            <TextInput list={pokemons} search={setSelected} />
+          </Box>
+          {selected !== null && <ResultPokemon pokemonName={selected} setSelected={setSelected} />}
+        </div>
+    </Container>
   );
 }
 

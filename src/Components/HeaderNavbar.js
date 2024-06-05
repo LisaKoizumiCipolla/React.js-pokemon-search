@@ -7,9 +7,9 @@ function HeaderNavbar() {
 
 
     return ( 
-    <div className='Navbar'>
+    <div className='navbar'>
         <ActionIcon
-            className='NightSwitch'
+            className='night-switch'
             variant="outline"
             color={dark ? 'yellow' : 'blue'}
             onClick={() => toggleColorScheme()}
